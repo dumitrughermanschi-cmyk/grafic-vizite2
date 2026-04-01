@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grafic Vizite Magazine – Aprilie 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181c27;
+    --surface2: #1f2537;
+    --border: #2a3048;
+    --accent: #4f7cff;
+    --accent2: #00d4a1;
+    --text: #e8ecf5;
+    --muted: #6b7594;
+    --weekend: #12151e;
+    --weekend-text: #3d4460;
+    --header-bg: #161b2e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 32px 16px 60px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 36px;
+  }
+
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 4vw, 38px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+
+  .controls button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .controls button:hover { background: var(--accent); border-color: var(--accent); }
+
+  .controls button.danger:hover { background: #e05555; border-color: #e05555; }
+
+  .wrapper {
+    overflow-x: auto;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 820px;
+  }
+
+  thead tr th {
+    background: var(--header-bg);
+    padding: 14px 10px;
+    font-family: 'Syne', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  thead tr th:first-child {
+    color: var(--accent);
+    min-width: 110px;
+    text-align: left;
+    padding-left: 18px;
+  }
+
+  thead tr th:not(:first-child) {
+    min-width: 130px;
+    color: var(--text);
+    font-size: 11px;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  tbody tr:last-child { border-bottom: none; }
+
+  tbody tr:hover { background: rgba(79,124,255,0.04); }
+
+  tbody tr.weekend {
+    background: var(--weekend);
+  }
+
+  tbody tr.weekend td { color: var(--weekend-text); }
+
+  tbody tr.weekend:hover { background: rgba(255,255,255,0.02); }
+
+  td {
+    padding: 10px 8px;
+    vertical-align: middle;
+    font-size: 13px;
+  }
+
+  td:first-child {
+    padding-left: 18px;
+    font-weight: 500;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+
+  td:first-child .day-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    display: block;
+    line-height: 1;
+  }
+
+  td:first-child .day-name {
+    font-size: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  tbody tr.weekend td:first-child .day-num { color: var(--weekend-text); }
+  tbody tr.weekend td:first-child .day-name { color: #2a2f46; }
+
+  .cell-inner {
+    position: relative;
+  }
+
+  select {
+    width: 100%;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 7px 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    appearance: none;
+    cursor: pointer;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    outline: none;
+  }
+
+  select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(79,124,255,0.2);
+  }
+
+  select.filled {
+    border-color: var(--accent2);
+    color: var(--accent2);
+    background: rgba(0,212,161,0.07);
+  }
+
+  tbody tr.weekend select {
+    background: rgba(255,255,255,0.02);
+    color: var(--weekend-text);
+    cursor: default;
+    pointer-events: none;
+    border-color: #1e2336;
+  }
+
+  tbody tr.weekend select option { color: #333; }
+
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .dot.active { background: var(--accent2); }
+  .dot.empty { background: var(--border); }
+  .dot.wknd { background: #2a2f46; }
+
+  .export-area {
+    margin-top: 28px;
+    text-align: center;
+  }
+
+  .export-area button {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    color: #fff;
+    padding: 11px 30px;
+    border-radius: 9px;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: opacity 0.18s, transform 0.12s;
+  }
+
+  .export-area button:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .summary-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+
+  .summary-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .summary-chip .name { color: var(--accent); font-weight: 600; font-size: 11px; }
+  .summary-chip .count { color: var(--accent2); font-weight: 700; }
+
+  @media print {
+    body { background: #fff; color: #000; padding: 10px; }
+    header h1 { -webkit-text-fill-color: #0a3cff; }
+    .controls, .export-area, .legend { display: none; }
+    table { min-width: unset; }
+    select { border: 1px solid #ccc; color: #000; background: #fff; }
+    .wrapper { border: 1px solid #ccc; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>📋 Grafic Vizite Magazine</h1>
+  <p>Aprilie 2026 &mdash; Planificare asistări în teren</p>
+</header>
+
+<div class="summary-bar" id="summaryBar"></div>
+
+<div class="controls">
+  <button onclick="clearAll()" class="danger">🗑 Șterge tot</button>
+  <button onclick="window.print()">🖨 Printează</button>
+  <button onclick="exportCSV()">📥 Export CSV</button>
+</div>
+
+<div class="wrapper">
+  <table id="scheduleTable">
+    <thead>
+      <tr>
+        <th>Zi</th>
+        <th>M. Guiban</th>
+        <th>N. Bărbuța</th>
+        <th>D. Ghermanschi</th>
+        <th>M. Ușurelu</th>
+        <th>C. Burlacu</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="dot active"></div> Magazin selectat</div>
+  <div class="legend-item"><div class="dot empty"></div> Necompletat</div>
+  <div class="legend-item"><div class="dot wknd"></div> Weekend</div>
+</div>
+
+<div class="export-area">
+  <button onclick="exportCSV()">📥 Descarcă ca CSV</button>
+</div>
+
+<script>
+const persons = ['M. Guiban', 'N. Bărbuța', 'D. Ghermanschi', 'M. Ușurelu', 'C. Burlacu'];
+
+const magazines = [
+  '— alege magazin —',
+  'MD-01 Centru',
+  'MD-02 Botanica',
+  'MD-03 Buiucani',
+  'MD-04 Rîșcani',
+  'MD-05 Ciocana',
+  'MD-06 Telecentru',
+  'MD-07 Durlești',
+  'MD-08 Cricova',
+  'MD-09 Codru',
+  'MD-10 Trușeni',
+  'MD-11 Stăuceni',
+  'MD-12 Colonița',
+  'MD-13 Vatra',
+  'MD-14 Ghidighici',
+  'MD-15 Sângera',
+  'Altul...'
+];
+
+const dayNames = ['Duminică','Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă'];
+
+function getDaysApril() {
+  const days = [];
+  for (let d = 1; d <= 30; d++) {
+    const date = new Date(2026, 3, d);
+    days.push({ date, day: d, dayOfWeek: date.getDay() });
+  }
+  return days;
+}
+
+function isWeekend(dayOfWeek) {
+  return dayOfWeek === 0 || dayOfWeek === 6;
+}
+
+function loadData() {
+  try { return JSON.parse(localStorage.getItem('viziteApr2026') || '{}'); }
+  catch { return {}; }
+}
+
+function saveData(data) {
+  try { localStorage.setItem('viziteApr2026', JSON.stringify(data)); } catch {}
+}
+
+let scheduleData = loadData();
+
+function buildTable() {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+  const days = getDaysApril();
+
+  days.forEach(({ date, day, dayOfWeek }) => {
+    const weekend = isWeekend(dayOfWeek);
+    const tr = document.createElement('tr');
+    if (weekend) tr.classList.add('weekend');
+
+    // Day cell
+    const tdDay = document.createElement('td');
+    tdDay.innerHTML = `<span class="day-num">${String(day).padStart(2,'0')}</span><span class="day-name">${dayNames[dayOfWeek]}</span>`;
+    tr.appendChild(tdDay);
+
+    persons.forEach((person, pi) => {
+      const td = document.createElement('td');
+      const key = `${day}-${pi}`;
+
+      if (weekend) {
+        const sel = document.createElement('select');
+        sel.disabled = true;
+        const opt = document.createElement('option');
+        opt.textContent = '—';
+        sel.appendChild(opt);
+        td.appendChild(sel);
+      } else {
+        const sel = document.createElement('select');
+        magazines.forEach((mag, mi) => {
+          const opt = document.createElement('option');
+          opt.value = mi === 0 ? '' : mag;
+          opt.textContent = mag;
+          sel.appendChild(opt);
+        });
+
+        const saved = scheduleData[key];
+        if (saved) {
+          sel.value = saved;
+          if (saved) sel.classList.add('filled');
+        }
+
+        sel.addEventListener('change', () => {
+          if (sel.value) {
+            sel.classList.add('filled');
+          } else {
+            sel.classList.remove('filled');
+          }
+          scheduleData[key] = sel.value;
+          saveData(scheduleData);
+          updateSummary();
+        });
+
+        td.appendChild(sel);
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+  updateSummary();
+}
+
+function updateSummary() {
+  const bar = document.getElementById('summaryBar');
+  bar.innerHTML = '';
+  persons.forEach((person, pi) => {
+    let count = 0;
+    for (let d = 1; d <= 30; d++) {
+      const key = `${d}-${pi}`;
+      if (scheduleData[key]) count++;
+    }
+    const chip = document.createElement('div');
+    chip.className = 'summary-chip';
+    chip.innerHTML = `<span class="name">${person}</span><span class="count">${count}</span><span style="color:var(--muted);font-size:10px">zile</span>`;
+    bar.appendChild(chip);
+  });
+}
+
+function clearAll() {
+  if (!confirm('Ștergi toate selecțiile?')) return;
+  scheduleData = {};
+  saveData(scheduleData);
+  buildTable();
+}
+
+function exportCSV() {
+  const rows = [['Zi', ...persons]];
+  const days = getDaysApril();
+  days.forEach(({ day, dayOfWeek }) => {
+    const weekend = isWeekend(dayOfWeek);
+    const row = [`${String(day).padStart(2,'0')} Apr - ${dayNames[dayOfWeek]}`];
+    persons.forEach((_, pi) => {
+      row.push(weekend ? '—' : (scheduleData[`${day}-${pi}`] || ''));
+    });
+    rows.push(row);
+  });
+
+  const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'grafic_vizite_aprilie_2026.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+buildTable();
+</script>
+</body>
+</html>
